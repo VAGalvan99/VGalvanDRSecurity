@@ -1,0 +1,147 @@
+﻿@model ML.Persona
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Persona</h2>
+        </div>
+    </div>
+
+    @using (@Html.BeginForm("Form", "Persona", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.IdPersona)
+
+        <div class="row">
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control ", @placeholder = "Nombre", @id="txtNombre", @onkeyup = "LetrasMayusculas(this)"})
+                    @Html.LabelFor(model => model.Nombre, new { @class = "control-label  col-md-12"})
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @placeholder = "Apellido Paterno", @onkeyup = "LetrasMayusculas(this)"})
+                    @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "control-label col-md-12"})
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control ", @placeholder = "Apellido Materno", @onkeyup = "LetrasMayusculas(this)"})
+                    @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "control-label col-md-12"})
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @placeholder = "Fecha de Nacimiento", @id = "txtFechaNacimiento"})
+                    @Html.LabelFor(model => model.FechaNacimiento, new { @class = "control-label col-md-12"})
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Sexo)
+                <br />
+                @Html.RadioButtonFor(model => model.Sexo, "H") Hombre <br />
+                
+                @Html.RadioButtonFor(model => model.Sexo, "M") Mujer
+                
+                @Html.ValidationMessageFor(model => model.Sexo, null, new { @class = "text-danger" })
+            </div>
+
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.DropDownListFor(model => model.Estado.IdEstado, new SelectList(Model.Estado.Estados, "IdEstado", "Nombre"), "Seleccione un Estado",new { @class = "form-control", @placeholder = "Estado", @id = "ddlEstado" })
+                    @Html.LabelFor(model => model.Estado, new { @class = "control-label col-md-12"})
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    @Html.TextBoxFor(model => model.CURP, new { @class = "form-control", @disabled = "disabled", @placeholder = "CURP"})
+                    @Html.LabelFor(model => model.CURP, new { @class = "control-label col-md-3"})
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3 mt-3">
+                    <input type="file" class="form-control" id="IFImagen" name="IFImagen" onchange="validateFile(this), readURL(this);" />                
+                </div>
+            </div>
+            <div class="col">
+                @if (Model.Imagen != null)
+                {
+                    <img id="ImgImagen" class="img-fluid" src="data:image/*;base64,@Model.Imagen" style="width:120px ; height:120px" />
+                }
+                else
+                {
+                    <img id="ImgImagen" class="img-fluid" src="~/Images/UsuarioSinFoto.png" style="width:120px ; height:120px" />
+                }
+                @Html.HiddenFor(model => model.Imagen)
+            </div>
+        </div>
+
+        <input type="submit" class="btn btn-success" value="Enviar" />
+        @Html.ActionLink("Regresar", "GetAll", "Persona", htmlAttributes: new { @class = "btn btn-danger" })
+    }
+</div>
+
+@section Scripts
+{
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+    $( "#txtFechaNacimiento" ).datepicker({dateFormat: 'dd-mm-yy',
+                                changeMonth: true,
+                                yearRange: '1930:2022',
+                                changeYear: true});
+    });
+
+    function LetrasMayusculas(e){
+        e.value = e.value.toUpperCase();
+    }
+
+    function validateFile() {
+           var allowedExtension = ['jpg', 'jpeg', 'png'];
+           var fileExtension = document.getElementById("IFImagen").value.split('.').pop().toLowerCase();
+           var isValidFile = false;
+
+           for (var index in allowedExtension) {
+
+               if (fileExtension === allowedExtension[index]) {
+                   isValidFile = true;
+                   break;
+               }
+           }
+
+           if (!isValidFile) {
+               alert('Las extensiones permitidas son: *.' + allowedExtension.join(', *.'));
+               document.getElementById('IFFoto').value = "";
+           }
+
+           return isValidFile;
+       }
+
+       function readURL(input) {
+           if (input.files && input.files[0]) {
+               var reader = new FileReader();
+
+               reader.onload = function(e) {
+                   $('#ImgImagen').attr('src', e.target.result);
+               };
+
+               reader.readAsDataURL(input.files[0]);
+           }
+       }
+</script>
+}

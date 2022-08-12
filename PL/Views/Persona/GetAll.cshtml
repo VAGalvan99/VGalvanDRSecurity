@@ -1,0 +1,145 @@
+﻿@model ML.Persona
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<div class="container mt-3">
+    <div class="row">
+    <div class="col-md-12">
+    <h2>Persona</h2>
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-12">
+    <h5>Seleccione una persona para editarla o eliminarla, o el botón [+] para agregar una nueva.</h5>
+    <hr />
+    <div style="float:right">
+    @Html.ActionLink("+", "Form", "Persona", htmlAttributes: new { @class="btn btn-success" })
+    </div>
+    </div>
+    </div>
+    <br/>
+    @if (Model.Personas.Count == 0)
+    {
+    <div class="alert alert-danger">No existen personas registradas.</div>
+    }
+    else
+    {
+    <div class="table-responsive">
+    <table class="table table-hover table-bordered border-light ">
+    <thead>
+    <tr>
+    <td class="text-center table-secondary">Editar</td>
+    <td class="text-center table-secondary">Nombre</td>
+    <td class="text-center table-secondary">Fecha de Nacimiento</td>
+    <td class="text-center table-secondary">Sexo</td>
+    <td class="text-center table-secondary">Estado</td>
+    <td class="text-center table-secondary">CURP</td>
+    <td class="text-center table-secondary">Imagen</td>
+    <td class="text-center table-secondary">Eliminar</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (ML.Persona persona in Model.Personas)
+    {
+    <tr>
+    <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form", "Persona", new { IdPersona = @persona.IdPersona })"><i class="bi bi-pencil-square"></i></a></td>
+    <td class="text-center"> @persona.Nombre @persona.ApellidoPaterno @persona.ApellidoMaterno </td>
+    <td class="text-center"> @persona.FechaNacimiento </td>
+    <td class="text-center"> @persona.Sexo </td>
+    <td class="text-center"> @persona.Estado.Nombre </td>
+    <td class="text-center"> @persona.Curp </td>
+    <td class="text-center">
+    <img id="Img" class="img-fluid" src="data:image/*;base64,@persona.Imagen" style="width:90px; height: 90px;" />
+    </td>
+    <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Persona", new { IdPersona = @persona.IdPersona })" onclick = "return confirm('¿Realmente desea eliminar a esta persona?')"><i class="bi bi-trash3-fill"></i></a></td>
+    </tr>
+    }
+    </tbody>
+    </table>
+    </div>
+    }
+    </div>*@
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Persona</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Seleccione una persona para editarla o eliminarla, o el botón de "Agregar" para añadir una nueva.</h5>
+                <hr />
+                <div style="float:right">
+                    <a class="btn btn-success" href="@Url.Action("Form", "Persona")"> <i class="bi bi-person-plus-fill"></i> Agregar </a>
+                </div>
+            </div>
+        </div> <br/>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-wrap">
+                    <table class="table table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Persona</th>
+                                <th>Sexo</th>
+                                <th>Estado</th>
+                                <th>CURP</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ML.Persona persona in Model.Personas)
+                            {
+                                <tr class="alert text-black" role="alert">
+                                    <td>
+                                        <label class="checkbox-wrap checkbox-primary">
+                                            <a class="btn btn-warning" href="@Url.Action("Form", "Persona", new { IdPersona = @persona.IdPersona })"><i class="bi bi-pencil-square"></i></a>
+                                        </label>
+                                    </td>
+                                    <td class="d-flex align-items-center">
+                                        <div class="img">
+                                            @if (@persona.Imagen == null || @persona.Imagen == "")
+                                            {
+                                                <img id="Img" class="img-fluid" src="~/Images/UsuarioSinFoto.png" style="width:40px ; height:40px" />
+                                            }
+                                            else
+                                            {
+                                                <img id="Img" class="img-fluid" src="data:image/*;base64,@persona.Imagen" style="width:40px ; height:40px" />
+                                            }
+
+                                        </div>
+                                        <div class="pl-3 email">
+                                            <span> @persona.Nombre @persona.ApellidoPaterno @persona.ApellidoMaterno </span>
+                                            <span>Fecha de Nacimiento: @persona.FechaNacimiento</span>
+                                        </div>
+                                    </td>
+
+                                    @if (@persona.Sexo == "M" )
+                                    {
+                                        <td class="status"> <i class="bi bi-gender-female"></i> @persona.Sexo </td>                                                                            
+                                    } 
+                                    else
+                                    {
+                                        <td class="status"> <i class="bi bi-gender-male"></i> @persona.Sexo </td>
+                                    }
+                                    
+                                    <td class="text-center"> @persona.Estado.Nombre </td>
+                                    <td class="text-center"> @persona.CURP </td>
+                                    <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Persona", new { IdPersona = @persona.IdPersona })" onclick="return confirm('¿Realmente desea eliminar a esta persona?')"><i class="bi bi-trash3-fill"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
